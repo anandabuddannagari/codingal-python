@@ -1,0 +1,67 @@
+# Variables
+level = 1
+lives = 3
+banner = 0
+
+# Controls
+if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+    playerX_change = -5
+
+if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+    playerX_change = 5
+
+if event.type == pygame.KEYUP and event.key in [
+    pygame.K_LEFT,
+    pygame.K_RIGHT,
+    pygame.K_a,
+    pygame.K_d
+]:
+    playerX_change = 0
+
+# Player speed
+playerX += playerX_change * (1 + level / 10)
+
+# Lives
+if enemyY[i] > 340:
+    lives -= 1
+    enemyY[i] = ENEMY_START_Y_MIN
+
+if lives <= 0:
+    game_over()
+
+# Enemy speed
+enemyX[i] += enemyX_change[i] * (1 + (level - 1) / 5)
+
+# Level up
+if score_value % 5 == 0:
+    level += 1
+    banner = 60
+
+# Bullet speed
+bulletY -= min(bulletY_change + level, 20)
+
+# Score display
+score = font.render(
+    "Score : " + str(score_value) + " Level : " + str(level),
+    True,
+    (255, 255, 255)
+)
+
+# Lives display
+for k in range(lives):
+    screen.blit(
+        pygame.transform.scale(playerImg, (32, 32)),
+        (750 - k * 40, 10)
+    )
+
+# Level banner
+if banner > 0:
+    banner -= 1
+    screen.blit(
+        over_font.render(
+            "LEVEL " + str(level),
+            True,
+            (255, 255, 0)
+        ),
+        (250, 200)
+    )
